@@ -51,7 +51,7 @@ services:
   consulagent:
     image: consul:${CONSUL_TAG:-latest}
     restart: unless-stopped
-    configs: 
+   configs: 
       - source: consul_agent
         target: /consul/config/config.json
     volumes:
@@ -147,6 +147,10 @@ services:
         window: 120s
       update_config:
         order: stop-first
+configs:
+  #
+  consul_server:
+  consul_agent:
   
 volumes:
   consul_files:
