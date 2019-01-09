@@ -67,7 +67,7 @@ services:
         reservations:
           cpus: '.25'
           memory: 256M
-      restart_policy
+      restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
