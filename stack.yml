@@ -150,7 +150,9 @@ services:
 configs:
   #
   consul_server:
+    external: true
   consul_agent:
+    external: true
   
 volumes:
   consul_files:
