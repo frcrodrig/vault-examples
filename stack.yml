@@ -4,8 +4,11 @@ services:
   consulserver:
     image: consul:${CONSUL_TAG:-latest}
     restart: unless-stopped
+    config: 
+      - source: consul_server
+        target: /consul/config/config.json
     volumes:
-      - ${PWD}/consul/server:/consul/config
+      #- ${PWD}/consul/server:/consul/config
       - consul_files:/consul/data
     ports:
       - target: 8300
@@ -32,7 +35,7 @@ services:
       - -config-file=/consul/config/config.json
       - -ui
     networks:
-      - devops
+      - vault
     deploy:
       resources:
         reservations:
@@ -48,20 +51,23 @@ services:
   consulagent:
     image: consul:${CONSUL_TAG:-latest}
     restart: unless-stopped
+    config: 
+      - source: consul_agent
+        target: /consul/config/config.json
     volumes:
-      - ${PWD}/consul/agent:/consul/config
+      #- ${PWD}/consul/agent:/consul/config
       - consul_agent_files:/consul/data
     command:
       - agent
       - -config-file=/consul/config/config.json
     networks:
-      - devops
+      - vault
     deploy:
       resources:
         reservations:
           cpus: '.25'
           memory: 256M
-      restart_policy:
+      restart_policy
         condition: on-failure
         delay: 5s
         max_attempts: 3
@@ -96,10 +102,11 @@ services:
     command: 
       - server
     networks:
-      - devops
+      - vault
     volumes:
-      - vault_logs:/vault/logs
-      - ${PWD}/vault/plugins:/vault/plugins
+      - vault_logs:/vault/log
+      - vault_plugins:/vault/plugins
+      #- ${PWD}/vault/plugins:/vault/plugins
     ports:
       - target: 8200
         published: 8200
@@ -123,7 +130,7 @@ services:
     ulimits:
       nproc: 65535
     networks:
-      - devops
+      - vault
     ports:
       - target: 27017
         published: 27017
@@ -145,7 +152,8 @@ volumes:
   consul_files:
   consul_agent_files:
   vault_logs:
+  vault_plugins:
   mongo_data:
 
 networks:
-  devops:
+  vault:
