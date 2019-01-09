@@ -4,7 +4,7 @@ services:
   consulserver:
     image: consul:${CONSUL_TAG:-latest}
     restart: unless-stopped
-    config: 
+    configs: 
       - source: consul_server
         target: /consul/config/config.json
     volumes:
@@ -51,7 +51,7 @@ services:
   consulagent:
     image: consul:${CONSUL_TAG:-latest}
     restart: unless-stopped
-    config: 
+    configs: 
       - source: consul_agent
         target: /consul/config/config.json
     volumes:
